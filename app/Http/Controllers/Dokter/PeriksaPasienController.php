@@ -13,19 +13,21 @@ use Illuminate\Http\Request;
 class PeriksaPasienController extends Controller
 {
 
-    public function index() {
+    public function index()
+    {
         $id = User::getIdFromUsername();
 
         $daftarPoliPasien = JadwalPeriksa::where('id_dokter', $id)
-        ->with('daftar_polis', 'daftar_polis.pasien')
-        ->orderBy('jadwal_periksa.hari', 'asc')
-        ->orderBy('jadwal_periksa.jam_mulai', 'asc')
-        ->get();
+            ->with('daftar_polis', 'daftar_polis.pasien')
+            ->orderBy('jadwal_periksa.hari', 'asc')
+            ->orderBy('jadwal_periksa.jam_mulai', 'asc')
+            ->get();
 
         return view('dokter.periksa-pasien.index', compact('daftarPoliPasien'));
     }
 
-    public function detail($poli) {
+    public function detail($poli)
+    {
         $periksa = Periksa::with(
             'detail_periksas',
             'detail_periksas.obat',
@@ -41,7 +43,8 @@ class PeriksaPasienController extends Controller
         ]);
     }
 
-    public function edit($poli) {
+    public function edit($poli)
+    {
         $daftarObat = Obat::all();
 
         $poli = DaftarPoli::with('pasien')->where('id', $poli)->first();
@@ -55,16 +58,18 @@ class PeriksaPasienController extends Controller
     }
 
 
-    public function update(Request $request, DaftarPoli $poli) {
+    public function update(Request $request, DaftarPoli $poli)
+    {
         $biayaDokter = 150000;
         $biayaObat = 0;
         $totalBiaya = 0;
 
-        foreach ($request->get('obat') as $idObat) {
-            $obat = Obat::find($idObat);
-            $biayaObat += $obat->harga;
+        if ($request->get('obat') != null || $request->get('obat') != []) {
+            foreach ($request->get('obat') as $idObat) {
+                $obat = Obat::find($idObat);
+                $biayaObat += $obat->harga;
+            }
         }
-
         $totalBiaya = $biayaDokter + $biayaObat;
 
         $catatan = $request->get('catatan');
@@ -77,10 +82,12 @@ class PeriksaPasienController extends Controller
             'biaya_periksa' => $totalBiaya
         ]);
 
-        foreach ($request->get('obat') as $idObat) {
-            $periksa->detail_periksas()->create([
-                'id_obat' => $idObat
-            ]);
+        if ($request->get('obat') != null || $request->get('obat') != []) {
+            foreach ($request->get('obat') as $idObat) {
+                $periksa->detail_periksas()->create([
+                    'id_obat' => $idObat
+                ]);
+            }
         }
 
         return redirect()->route('dokter.periksa.index')->with('success', 'Berhasil menambahkan data periksa pasien');

@@ -28,7 +28,18 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+
+        $user = auth()->user();
+
+        if ($user->role == "Admin") {
+            return redirect()->route('admin.dokter.index');
+        } else if ($user->role == "Dokter") {
+            return redirect()->route('dokter.jadwal-periksa.index');
+        } else if ($user->role == "Pasien") {
+            return redirect()->route('pasien.daftar-poli.index');
+        }
+
+        return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->prefix("admin")->group(function () {

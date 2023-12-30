@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>Poliklinik BK</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -215,10 +215,11 @@
                                 </a>
                             </li>
 
-                            <li>
-                                <a href="#"
+                            <li
+                                class="{{ request()->routeIs('dokter.riwayat-pasien.*') ? 'bg-sky-600 rounded-lg' : 'bg-[#214b8e] rounded-lg' }}"
+                            >
+                                <a href="{{ route('dokter.riwayat-pasien.index') }}"
                                     class="flex items-center p-2 text-white rounded-lg dark:text-white group">
-
                                     <svg class="flex-shrink-0 w-5 h-5 text-gray-300 transition duration-75 group-hover:text-gray-100"
                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor"
                                         viewBox="0 0 18 20">
