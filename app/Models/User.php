@@ -19,7 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'username',
+        'alamat',
+        'role',
+        'no_ktp',
+        'no_hp',
         'password',
     ];
 
@@ -42,4 +46,13 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public static function getIdFromUsername() {
+        $username = auth()->user()->username;
+        $split = explode('_', $username);
+        $username = end($split);
+        $id = substr($username, 1);
+
+        return $id;
+    }
 }
