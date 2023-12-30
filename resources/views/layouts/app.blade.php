@@ -248,8 +248,10 @@
                             </li>
                         @endif
 
-                        <li>
-                            <a href="#"
+                        <li
+                            class="{{ request()->routeIs('account.show') ? 'bg-sky-600 rounded-lg' : 'bg-[#214b8e] rounded-lg' }}"
+                        >
+                            <a href="{{route('account.show')}}"
                                 class="flex items-center p-2 text-white rounded-lg dark:text-white group">
 
                                 <svg class="flex-shrink-0 w-5 h-5 text-gray-300 transition duration-75 group-hover:text-gray-100"
